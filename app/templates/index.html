@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>URL Shortener</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <a href="/">Home</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+    <a href="/dashboard">My Links</a>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h1>URL Shortener</h1>
+
+<input id="url" placeholder="Paste your long URL">
+
+<button onclick="shorten()">Shorten</button>
+
+<div id="result" class="link-result"></div>
+
+</div>
+
+</div>
+
+<script>
+
+async function shorten() {
+
+const url = document.getElementById("url").value
+const token = localStorage.getItem("token")
+const headers = {
+"Content-Type": "application/json"
+}
+if (token) {
+headers["Authorization"] = `Bearer ${token}`
+}
+
+const response = await fetch("/links/shorten", {
+method: "POST",
+headers,
+body: JSON.stringify({
+original_url: url
+})
+})
+
+const data = await response.json()
+
+document.getElementById("result").innerHTML =
+`Short link: <a href="${data.short_url}" target="_blank">${data.short_url}</a>`
+
+}
+
+</script>
+
+</body>
+</html>

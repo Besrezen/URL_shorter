@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        <a href="/dashboard">My Links</a>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Register</h2>
+
+            <input id="email" placeholder="Email">
+            <input id="password" type="password" placeholder="Password">
+
+            <button onclick="registerUser()">Register</button>
+
+            <div id="register-result" class="link-result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function registerUser() {
+            const response = await fetch("/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: document.getElementById("email").value,
+                    password: document.getElementById("password").value
+                })
+            });
+
+            const data = await response.json();
+            const result = document.getElementById("register-result");
+
+            if (response.ok) {
+                result.innerText = "Registration successful. Now go to login.";
+            } else {
+                result.innerText = data.detail || "Registration failed";
+            }
+        }
+    </script>
+</body>
+</html>
